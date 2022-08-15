@@ -5,7 +5,6 @@ import std/enumerate
 import os, strutils
 import md5
 
-# echo $secureHash("enthus1ast")
 
 proc gravatarHash*(email: string): string =
   email.strip.tolower().getMD5()
@@ -87,11 +86,6 @@ proc renderImg*(nick: string, path: string) =
           text,
           pos
         )
-        # translate(vec2((256 / 2), (256 / 2) - font.defaultLineHeight)))
-        # ctx.fillText(
-        #   font,
-        #   text,
-        # translate(vec2((256 / 2), (256 / 2) - font.defaultLineHeight)))´
       of 8:
         # let path = newPath()
         # path.polygon(
@@ -109,16 +103,6 @@ proc renderImg*(nick: string, path: string) =
   var maxRot = rand(8) + 4
   for idx in 1 .. maxRot:
     image.draw(image, translate(vec2(width / 2, height / 2 )) * rotate(toRadians( (360 / maxRot).int * idx)), NormalBlend)
-
-  ## Font loading does not work
-  # let text = $nick[0]
-  # image.fillText(font.typeset(text, bounds = vec2(0, 0)), vec2(10, 10))
-  # ctx.fillStyle = ColorRGBA(r: 0, g: 0, b: 0, a: 255)
-  # ctx.textStyle = ColorRGBA(r: 127, g: 127, b: 127, a: 127)
-  # image.fillText(
-  #   font,
-  #   text,
-  #   translate(vec2((256 / 2), (256 / 2) - font.defaultLineHeight)))
 
   image.writeFile(path)
 

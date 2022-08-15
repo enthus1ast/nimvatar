@@ -12,8 +12,6 @@
 
 <h2>Some random examples:</h2>
 <h3>Version 1</h3>
-{# {% var paths =  "public" / "v1" %} #}
-{# {%for path in walkFiles(paths / "*.png") %} #}
 {%for path in getRandomImagesV1() %}
   <a href="{{ path.cleaned() }}"><img src="{{ path.cleaned() }}"></a>
 {% endfor %}
