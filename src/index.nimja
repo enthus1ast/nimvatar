@@ -1,5 +1,6 @@
 <h1>Nimvatar</h1>
 <img src="/v1/nimvatar4__nimvatar.png" alt="">
+<a href="https://github.com/enthus1ast/nimvatar">github</a>
 
 <p>A lunchtime experiment to build a gravatar like image generator</p>
 
@@ -11,7 +12,7 @@
 
 <h2>Some random examples:</h2>
 <h3>Version 1</h3>
-{% var paths =  "public" / "v1" %}
+{# {% var paths =  "public" / "v1" %} #}
 {# {%for path in walkFiles(paths / "*.png") %} #}
 {%for path in getRandomImagesV1() %}
   <a href="{{ path.cleaned() }}"><img src="{{ path.cleaned() }}"></a>
