@@ -1,0 +1,9 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  nimvatar:
+    # build: .
+    image: nimvatar
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./public:/nimvatar/src/public
