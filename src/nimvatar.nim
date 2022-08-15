@@ -2,9 +2,17 @@ import std/sha1
 import random
 import pixie
 import std/enumerate
-import os
+import os, strutils
+import md5
 
 # echo $secureHash("enthus1ast")
+
+proc gravatarHash*(email: string): string =
+  email.strip.tolower().getMD5()
+
+const
+  pixelWidth = 256
+  pixelHeight = 256
 
 proc strToNum(str: string): int64 =
   for ch in str:
@@ -28,7 +36,7 @@ type
 
 proc genRandColor(str: string): ColorRGBA =
   seed(str)
-  return ColorRGBA(r:rand(255).uint8, g: rand(255).uint8, b: rand(255).uint8, a: rand(255).uint8)
+  return ColorRGBA(r:rand(255).uint8, g: rand(255).uint8, b: rand(255).uint8, a: clamp(rand(255).uint8, 80, 255))
 
 proc genGridPic(str: string): GridPic =
   seed(str)
@@ -38,12 +46,17 @@ proc genGridPic(str: string): GridPic =
       result[yy][xx] = GridPicPixel(color: sample(colors))
       # result[yy][xx] = GridPicPixel(color: ColorRGBA(r:rand(255).uint8, g: rand(255).uint8, b: rand(255).uint8, a: 255))
 
+proc randVec2(max: float = 256.0): Vec2 =
+  return vec2(rand(max), rand(max))
 
-proc renderImg(nick: string, path: string) =
+# proc renderImg(nick: string, path: string, width, height, grid: int) =
+proc renderImg*(nick: string, path: string) =
   let gp = genGridPic(nick)
-  const width = 256
-  const height = 256
-  const sw = 256 / 16
+  const width = 256 div 4
+  const height = 256 div 4
+  # let sw = 256 / 4
+  # let sw = 256 / 32
+  let sw = 256 / 32
   var image = newImage(width, height)
   image.fill(rgba(255, 255, 255, 255))
   let ctx = newContext(image)
@@ -66,7 +79,9 @@ proc renderImg(nick: string, path: string) =
       of 6:
         ctx.strokeCircle(Circle(pos: pos, radius: sw))
       of 7:
-        ctx.fontSize = rand(127.0)
+        # TODO how color font?
+        # ctx.fontSize = rand(127.0)
+        ctx.fontSize = rand(width / 4)
         let text = $nick[0]
         ctx.fillText(
           text,
@@ -76,13 +91,24 @@ proc renderImg(nick: string, path: string) =
         # ctx.fillText(
         #   font,
         #   text,
-        # translate(vec2((256 / 2), (256 / 2) - font.defaultLineHeight)))
+        # translate(vec2((256 / 2), (256 / 2) - font.defaultLineHeight)))´
+      of 8:
+        # let path = newPath()
+        # path.polygon(
+        #   vec2(rand(256.0), rand(256.0)),
+        #   70,
+        #   sides = rand(10) + 5
+        # )
+        # # image.stroke(path)
+        # let paint = newPaint(TiledImagePaint)
+        for idx in 0 .. rand(10):
+          ctx.strokeSegment(segment(randVec2(), randVec2()))
       else:
         ctx.fillRect(rect(pos, wh))
 
-  var maxRot = rand(8)
+  var maxRot = rand(8) + 4
   for idx in 1 .. maxRot:
-    image.draw(image, translate(vec2(256 / 2, 256 / 2 )) * rotate(toRadians( (360 / maxRot).int * idx)), NormalBlend)
+    image.draw(image, translate(vec2(width / 2, height / 2 )) * rotate(toRadians( (360 / maxRot).int * idx)), NormalBlend)
 
   ## Font loading does not work
   # let text = $nick[0]
@@ -96,7 +122,14 @@ proc renderImg(nick: string, path: string) =
 
   image.writeFile(path)
 
-renderImg("enthus1ast", getAppDir() / "nimvatar1__enthus1ast.png")
-renderImg("sn0re", getAppDir() / "nimvatar2__sn0re.png")
-renderImg("dom96", getAppDir() / "nimvatar3__dom96.png")
-renderImg("Araq", getAppDir() / "nimvatar4__Araq.png")
+renderImg("enthus1ast", getAppDir() / "public" / "v1" / "nimvatar1__enthus1ast.png")
+renderImg("sn0re", getAppDir() / "public" / "v1" / "nimvatar2__sn0re.png")
+renderImg("dom96", getAppDir() / "public" / "v1" / "nimvatar3__dom96.png")
+renderImg("Araq", getAppDir() / "public" / "v1" / "nimvatar4__Araq.png")
+renderImg("Dankr4d", getAppDir() / "public" / "v1" / "nimvatar4__Dankr4d.png")
+renderImg("AAAAAAAAAAAAAAAAAAAAAAAAAA", getAppDir() / "public" / "v1" / "nimvatar4__AAAAAAAAAAAAAAAAAAAAAAAAAA.png")
+renderImg("krause@biochem2.uni-frankfurt.de", getAppDir() / "public" / "v1" / "nimvatar4__krause@biochem2.uni-frankfurt.de.png")
+renderImg("peter@biochem2.uni-frankfurt.de", getAppDir() / "public" / "v1" / "nimvatar4__peter@biochem2.uni-frankfurt.de.png")
+renderImg("uggu@biochem2.uni-frankfurt.de", getAppDir() / "public" / "v1" / "nimvatar4__uggu@biochem2.uni-frankfurt.de.png")
+renderImg("david@code0.xyz", getAppDir() / "public" / "v1" / "nimvatar4__david@code0.xyz.png")
+renderImg("nimvatar", getAppDir() / "public" / "v1" / "nimvatar4__nimvatar.png")

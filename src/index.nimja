@@ -1,0 +1,21 @@
+<h1>Nimvatar</h1>
+<img src="/v1/nimvatar4__nimvatar.png" alt="">
+
+<p>A lunchtime experiment to build a gravatar like image generator</p>
+
+<h2>V1</h2>
+<form action="/v1" method="get">
+<input type="text" id="in" name="in">
+<button type="submit">Gen V1</button>
+</form>
+
+<h2>Some random examples:</h2>
+<h3>Version 1</h3>
+{% var paths =  "public" / "v1" %}
+{# {%for path in walkFiles(paths / "*.png") %} #}
+{%for path in getRandomImagesV1() %}
+  <a href="{{ path.cleaned() }}"><img src="{{ path.cleaned() }}"></a>
+{% endfor %}
+
+
+
